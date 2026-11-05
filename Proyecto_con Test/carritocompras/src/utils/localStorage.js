@@ -1,4 +1,4 @@
-export function guardarCarrito(carrito) {
+  export function guardarCarrito(carrito) {
 
   localStorage.setItem(
     "carrito",

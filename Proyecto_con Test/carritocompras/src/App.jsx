@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import NavbarSuperior from "./components/NavbarSuperior";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DetalleProducto from "./pages/DetalleProducto";
-
+import AdministrarProductos from "./pages/AdministrarProductos";
 import {
   guardarCarrito,
   obtenerCarrito
@@ -23,48 +23,38 @@ const [carrito, setCarrito] = useState(obtenerCarrito() );
   
 
 
+
 function agregarAlCarrito(producto) {
 
-    const productoExiste = carrito.find(
-      item => item.id === producto.id
-    );
+    setCarrito((carritoActual) => {
 
+        const productoExiste = carritoActual.find(
+            item => item.id === producto.id
+        );
 
-    if (productoExiste) {
+        if (productoExiste) {
 
-      console.log(
-        "Cantidad anterior:",
-        productoExiste.cantidad
-      );
+            return carritoActual.map(item =>
+                item.id === producto.id
+                    ? {
+                        ...item,
+                        cantidad: item.cantidad + 1
+                    }
+                    : item
+            );
 
-      console.log(
-        "Cantidad nueva:",
-        productoExiste.cantidad + 1
-      );
-
-      setCarrito(
-        carrito.map(item =>
-          item.id === producto.id
-            ? {
-                ...item,
-                cantidad: item.cantidad + 1
-              }
-            : item
-        )
-      );
-
-    } else {
-
-      setCarrito([
-        ...carrito,
-        {
-          ...producto,
-          cantidad: 1
         }
-      ]);
 
-    }
-  }
+        return [
+            ...carritoActual,
+            {
+                ...producto,
+                cantidad: 1
+            }
+        ];
+    });
+}
+
   // ==========================================
   // AUMENTAR CANTIDAD
   // ==========================================
@@ -210,7 +200,14 @@ function agregarAlCarrito(producto) {
     </ProtectedRoute>
   }
         />
-
+<Route
+  path="/administrar-productos"
+  element={
+    <ProtectedRoute>
+      <AdministrarProductos />
+    </ProtectedRoute>
+  }
+/>
 
         {/* LOGIN */}
 
